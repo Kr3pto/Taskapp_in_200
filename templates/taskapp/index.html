@@ -1,0 +1,109 @@
+{% extends 'partials/base.html' %}
+
+{% block title %}Home{% endblock title %}
+{% load crispy_forms_tags %}
+{% block content %}
+ <!--First interface design-->
+ <div class="container">
+    <div class="row my-4">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header bg-dark text-white">Statistics</div>
+                <div class="card-body shadow">
+                    <div class="row">
+                        <div class="col-xl-4">
+                            <div class="card shadow my-card">
+                                <div class="text-white card-body bg-dark">
+                                    Total Task
+                                    <h5 class="text-center">{{total_data}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="card shadow my-card">
+                                <div class="text-white card-body bg-dark">
+                                   Completed Task
+                                   <h5 class="text-center">{{complete_task}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="card shadow">
+                                <div class="text-white card-body bg-dark">
+                                    Uncompleted Task
+                                    <h5 class="text-center">{{uncompleted_task}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="card shadow">
+                <div class="card-header">
+                  Task form
+                </div>
+                <div class="card-body">
+                    <form class="d-grid" method="POST">
+                        {% csrf_token %}
+                         {{form |crispy }}
+                         <input  type="submit" class="btn btn-success btn-sm mt-3"> 
+                    </form>
+                </div>
+              </div>
+        </div>
+
+    </div>
+</div>
+<!--First interface design ends-->
+
+<!--Last section-->
+<div class="container">
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                 Graph
+                </div>
+                <div class="card-body">
+                  <canvas id="myChart" ></canvas>
+                </div>
+              </div>
+        </div>
+        <div class="col-xl-6">
+          <div class="list-group">
+			<div class="list-group-item">Task List</div>
+           {% for task in data  %}
+           <div class="list-group-item">
+            <small class="text-muted">{{task.date}}</small>
+            <div class="row">
+                <div class="col-md-8">
+                    {%if task.isComplete%}
+                    <del>{{task.task}}</del>
+                    {% else %}
+                    {{task.task}}
+                    {%endif%}
+                    
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <a class="btn btn-primary btn-sm" href="{% url 'taskapp-edit' task.id %}">Edit</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'taskapp-delete' task.id %}">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+           {% endfor %}
+			
+		</div>
+        </div>
+    </div>
+</div>
+<!--last section ends-->
+{% include 'partials/graph.html' %}
+{% endblock content %}
+
+
+ 
